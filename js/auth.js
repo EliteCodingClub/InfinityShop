@@ -286,6 +286,65 @@
     toast("Signed out.", "success");
   }
 
+  function openProfile() {
+    if (!state.profile) {
+      toast("Please sign in to view your profile.", "warning");
+      return;
+    }
+    
+    $("#profile-name").value = state.profile.full_name || "";
+    $("#profile-phone").value = state.profile.phone || "";
+    $("#profile-street").value = state.profile.street_address || "";
+    $("#profile-city").value = state.profile.city || "";
+    $("#profile-state").value = state.profile.state || "";
+    $("#profile-zip").value = state.profile.zip_code || "";
+    $("#profile-msg").textContent = "";
+
+    $("#profile-overlay")?.classList.remove("modal-overlay--hidden");
+    $("#profile-modal")?.classList.remove("modal--hidden");
+    document.body.classList.add("modal-open");
+  }
+
+  function closeProfile() {
+    $("#profile-overlay")?.classList.add("modal-overlay--hidden");
+    $("#profile-modal")?.classList.add("modal--hidden");
+    document.body.classList.remove("modal-open");
+  }
+
+  async function handleProfileSave(event) {
+    event.preventDefault();
+    const btn = event.target.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = true;
+
+    const payload = {
+      full_name: $("#profile-name").value.trim(),
+      phone: $("#profile-phone").value.trim(),
+      street_address: $("#profile-street").value.trim(),
+      city: $("#profile-city").value.trim(),
+      state: $("#profile-state").value.trim(),
+      zip_code: $("#profile-zip").value.trim()
+    };
+
+    const { error } = await client
+      .from("profiles")
+      .update(payload)
+      .eq("id", state.user.id);
+
+    if (btn) btn.disabled = false;
+
+    if (error) {
+      $("#profile-msg").style.color = "var(--danger)";
+      $("#profile-msg").textContent = "Error: " + error.message;
+      return;
+    }
+
+    $("#profile-msg").style.color = "var(--ok)";
+    $("#profile-msg").textContent = "Profile saved successfully!";
+    await loadProfile();
+    updateAuthUI();
+    setTimeout(closeProfile, 1500);
+  }
+
   async function initSession() {
     const { data } = await client.auth.getSession();
     state.user = data.session?.user || null;
@@ -319,7 +378,15 @@
     $("#login-form")?.addEventListener("submit", handleLogin);
     $("#signup-form")?.addEventListener("submit", handleSignup);
     $("#forgot-form")?.addEventListener("submit", handleForgot);
+    $("#profile-form")?.addEventListener("submit", handleProfileSave);
     $("#logout-btn")?.addEventListener("click", logout);
+    $("#profile-link")?.addEventListener("click", (event) => {
+      event.preventDefault();
+      $("#user-dropdown")?.classList.remove("is-open");
+      openProfile();
+    });
+    $("#profile-modal-close")?.addEventListener("click", closeProfile);
+    $("#profile-overlay")?.addEventListener("click", closeProfile);
 
     $$(".auth-tab").forEach((tab) => {
       tab.addEventListener("click", () => switchAuthTab(tab.dataset.tab));

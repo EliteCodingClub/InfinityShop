@@ -26,6 +26,8 @@ CREATE TABLE public.profiles (
   latitude        DECIMAL(10, 8),
   longitude       DECIMAL(11, 8),
   is_admin        BOOLEAN DEFAULT FALSE,
+  last_login      TIMESTAMPTZ,
+  marketing_opt_in BOOLEAN DEFAULT FALSE,
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW()
 );
@@ -71,6 +73,11 @@ CREATE TABLE public.products (
   abv           DECIMAL(5, 2),   -- Alcohol By Volume %
   is_featured   BOOLEAN DEFAULT FALSE,
   is_active     BOOLEAN DEFAULT TRUE,
+  sku           TEXT UNIQUE,
+  barcode       TEXT UNIQUE,
+  slug          TEXT UNIQUE,
+  seo_title     TEXT,
+  seo_description TEXT,
   created_at    TIMESTAMPTZ DEFAULT NOW(),
   updated_at    TIMESTAMPTZ DEFAULT NOW()
 );
@@ -115,6 +122,11 @@ CREATE TABLE public.orders (
   delivered_at        TIMESTAMPTZ,
   cancelled_at        TIMESTAMPTZ,
   cancel_reason       TEXT,
+  
+  -- Cancellation & Refunds
+  cancellation_deadline TIMESTAMPTZ,
+  refund_status       TEXT DEFAULT 'none' CHECK (refund_status IN ('none', 'pending', 'completed', 'failed')),
+  refund_amount       DECIMAL(10, 2) DEFAULT 0,
   
   created_at          TIMESTAMPTZ DEFAULT NOW(),
   updated_at          TIMESTAMPTZ DEFAULT NOW()
@@ -528,62 +540,90 @@ CREATE INDEX idx_order_items_order_id ON public.order_items(order_id);
 CREATE INDEX idx_notifications_is_read ON public.notifications(is_read);
 
 -- ============================================================
--- 19. SAMPLE PRODUCTS (Optional — delete before production)
+-- 19. ANALYTICS VIEWS
 -- ============================================================
-INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, is_featured)
+CREATE MATERIALIZED VIEW public.daily_sales_stats AS
+SELECT 
+  DATE_TRUNC('day', created_at) AS sale_date,
+  COUNT(id) AS total_orders,
+  SUM(total) AS total_revenue
+FROM public.orders
+WHERE status != 'cancelled'
+GROUP BY 1;
+
+CREATE UNIQUE INDEX idx_daily_sales_date ON public.daily_sales_stats(sale_date);
+
+CREATE MATERIALIZED VIEW public.product_sales_stats AS
+SELECT
+  p.id AS product_id,
+  p.name AS product_name,
+  SUM(oi.quantity) AS total_sold,
+  SUM(oi.line_total) AS total_revenue
+FROM public.products p
+JOIN public.order_items oi ON p.id = oi.product_id
+JOIN public.orders o ON o.id = oi.order_id
+WHERE o.status != 'cancelled'
+GROUP BY p.id, p.name;
+
+CREATE UNIQUE INDEX idx_product_sales_id ON public.product_sales_stats(product_id);
+
+-- ============================================================
+-- 20. SAMPLE PRODUCTS (Optional — delete before production)
+-- ============================================================
+INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, is_featured, slug)
 SELECT
   'Jack Daniel''s Old No. 7',
   'The iconic Tennessee whiskey. Smooth, mellow character with notes of vanilla and oak.',
-  c.id, 34.99, 50, 'Jack Daniel''s', 750, 40.0, TRUE
+  c.id, 34.99, 50, 'Jack Daniel''s', 750, 40.0, TRUE, 'jack-daniels-old-no-7'
 FROM public.categories c WHERE c.slug = 'whiskey';
 
-INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, is_featured)
+INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, is_featured, slug)
 SELECT
   'Grey Goose Vodka',
   'Premium French vodka distilled from fine French wheat. Exceptionally smooth.',
-  c.id, 44.99, 35, 'Grey Goose', 750, 40.0, TRUE
+  c.id, 44.99, 35, 'Grey Goose', 750, 40.0, TRUE, 'grey-goose-vodka'
 FROM public.categories c WHERE c.slug = 'vodka';
 
-INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, is_featured)
+INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, is_featured, slug)
 SELECT
   'Patron Silver Tequila',
   'Ultra-premium tequila with a smooth, sweet taste and light pepper finish.',
-  c.id, 49.99, 28, 'Patron', 750, 40.0, TRUE
+  c.id, 49.99, 28, 'Patron', 750, 40.0, TRUE, 'patron-silver-tequila'
 FROM public.categories c WHERE c.slug = 'tequila';
 
-INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, is_featured)
+INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, is_featured, slug)
 SELECT
   'Hennessy VS Cognac',
   'A blend of over 40 eaux-de-vie. Elegant and lively with fruity notes.',
-  c.id, 39.99, 40, 'Hennessy', 750, 40.0, TRUE
+  c.id, 39.99, 40, 'Hennessy', 750, 40.0, TRUE, 'hennessy-vs-cognac'
 FROM public.categories c WHERE c.slug = 'brandy';
 
-INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv)
+INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, slug)
 SELECT
   'Bacardi Superior Rum',
   'Light and clean rum. Perfect for cocktails or sipping straight.',
-  c.id, 19.99, 60, 'Bacardi', 750, 37.5
+  c.id, 19.99, 60, 'Bacardi', 750, 37.5, 'bacardi-superior-rum'
 FROM public.categories c WHERE c.slug = 'rum';
 
-INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv)
+INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, slug)
 SELECT
   'Bombay Sapphire Gin',
   'Premium gin with 10 exotic botanicals. Crisp and aromatic.',
-  c.id, 29.99, 45, 'Bombay Sapphire', 750, 47.0
+  c.id, 29.99, 45, 'Bombay Sapphire', 750, 47.0, 'bombay-sapphire-gin'
 FROM public.categories c WHERE c.slug = 'gin';
 
-INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv)
+INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, slug)
 SELECT
   'Moët & Chandon Brut',
   'The world''s most celebrated champagne. Fresh, vibrant, and seductive.',
-  c.id, 54.99, 20, 'Moët & Chandon', 750, 12.0
+  c.id, 54.99, 20, 'Moët & Chandon', 750, 12.0, 'moet-chandon-brut'
 FROM public.categories c WHERE c.slug = 'champagne';
 
-INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv)
+INSERT INTO public.products (name, description, category_id, price, stock, brand, volume_ml, abv, slug)
 SELECT
   'Cabernet Sauvignon Reserve',
   'Full-bodied red wine with rich dark fruit, cedar and tobacco notes.',
-  c.id, 24.99, 55, 'Infinity Private Label', 750, 13.5
+  c.id, 24.99, 55, 'Infinity Private Label', 750, 13.5, 'cabernet-sauvignon-reserve'
 FROM public.categories c WHERE c.slug = 'wine';
 
 -- ============================================================

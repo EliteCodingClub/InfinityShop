@@ -14,7 +14,8 @@
     orders: [],
     products: [],
     categories: [],
-    settings: null
+    settings: null,
+    analytics: []
   };
 
   const statusFlow = ["accepted", "preparing", "dispatched", "delivered"];
@@ -116,7 +117,7 @@
   }
 
   async function refreshAll() {
-    await Promise.all([loadCategories(), loadProducts(), loadOrders(), loadSettings()]);
+    await Promise.all([loadCategories(), loadProducts(), loadOrders(), loadSettings(), loadAnalytics()]);
     renderDashboard();
     renderOrders();
     renderProducts();
@@ -154,6 +155,13 @@
     state.settings = data;
   }
 
+  async function loadAnalytics() {
+    const { data, error } = await db.from("daily_sales_stats").select("*").order("sale_date", { ascending: true });
+    if (!error) state.analytics = data || [];
+  }
+
+  let revenueChart = null;
+
   function renderDashboard() {
     const today = new Date().toDateString();
     const pending = state.orders.filter((order) => order.status === "pending").length;
@@ -169,6 +177,66 @@
     $("#metric-products").textContent = activeProducts;
 
     $("#latest-orders").innerHTML = orderTable(state.orders.slice(0, 6), false);
+
+    // Render Chart
+    const ctx = document.getElementById("revenueChart");
+    if (ctx && window.Chart) {
+      if (revenueChart) revenueChart.destroy();
+      
+      const labels = state.analytics.map(row => new Date(row.sale_date).toLocaleDateString());
+      const dataPoints = state.analytics.map(row => Number(row.total_revenue));
+
+      revenueChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Daily Revenue ($)',
+            data: dataPoints,
+            borderColor: '#008060',
+            backgroundColor: 'rgba(0, 128, 96, 0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+  }
+
+  function exportOrdersCSV() {
+    if (!state.orders.length) {
+      showAlert("No orders to export.", "warning");
+      return;
+    }
+    const headers = ["Order Number", "Date", "Status", "Customer ID", "Subtotal", "Total", "Payment Method", "Delivery Address"];
+    const rows = state.orders.map(o => [
+      o.order_number,
+      new Date(o.created_at).toISOString(),
+      o.status,
+      o.user_id,
+      o.subtotal,
+      o.total,
+      o.payment_method,
+      `"${escapeHtml(o.delivery_address)}, ${escapeHtml(o.delivery_city)}"`
+    ]);
+    const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `orders_export_${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   function orderTable(orders, includeActions = true) {
@@ -400,6 +468,7 @@
     $("#admin-logout").addEventListener("click", logout);
     $("#refresh-admin").addEventListener("click", refreshAll);
     $("#order-status-filter").addEventListener("change", renderOrders);
+    $("#export-orders-btn")?.addEventListener("click", exportOrdersCSV);
     $("#product-form").addEventListener("submit", saveProduct);
     $("#reset-product-form").addEventListener("click", resetProductForm);
     $("#settings-form").addEventListener("submit", saveSettings);

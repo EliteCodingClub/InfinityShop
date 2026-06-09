@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  const InfinityApp = window.Infinity;
+  const InfinityApp = window.Infinity || {};
+  window.Infinity = InfinityApp;
   const { $, $$, toast } = InfinityApp;
 
   const AGE_KEY = "infinity_age_verified";
@@ -53,7 +54,13 @@
       if (topButton) topButton.classList.toggle("back-to-top--hidden", window.scrollY < 500);
     }, { passive: true });
 
-    $("#back-to-top")?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    $("#back-to-top")?.addEventListener("click", () => {
+      if (window.lenis) {
+        window.lenis.scrollTo(0);
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
   }
 
   function initContactForm() {
@@ -74,23 +81,77 @@
   }
 
   function initLibraries() {
-    if (window.AOS) {
-      window.AOS.init({
-        duration: 700,
-        once: true,
-        offset: 80
+    // 1. Initialize Lenis for Smooth Scrolling
+    if (window.Lenis) {
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false,
       });
+
+      window.lenis = lenis;
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
     }
 
-    if (window.gsap) {
-      window.gsap.from(".navbar", { y: -20, opacity: 0, duration: 0.55, ease: "power2.out" });
-      window.gsap.from(".hero__title-line", {
-        y: 28,
-        opacity: 0,
-        duration: 0.75,
-        stagger: 0.12,
-        ease: "power3.out",
-        delay: 0.15
+    // 2. Initialize GSAP and ScrollTrigger
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      
+      // Update ScrollTrigger on Lenis scroll
+      if (window.lenis) {
+        window.lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+          window.lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      // Parallax Hero
+      gsap.to(".hero__bg", {
+        yPercent: 30,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true
+        }
+      });
+
+      // Reveal Animations (Replacing AOS)
+      const revealElements = document.querySelectorAll('[data-aos]');
+      revealElements.forEach((el) => {
+        const animation = el.getAttribute('data-aos');
+        const delay = (el.getAttribute('data-aos-delay') || 0) / 1000;
+        
+        let fromVars = { opacity: 0 };
+        if (animation === 'fade-up') fromVars.y = 50;
+        if (animation === 'fade-down') fromVars.y = -50;
+        if (animation === 'fade-left') fromVars.x = 50;
+        if (animation === 'fade-right') fromVars.x = -50;
+
+        gsap.from(el, {
+          ...fromVars,
+          duration: 1,
+          delay: delay,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          }
+        });
       });
     }
   }

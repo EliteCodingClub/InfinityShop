@@ -1,19 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Infinity Liquor Shop — Premium spirits, wines & beers delivered to your door in Florissant, MO. Order online, fast delivery within 10km." />
+  <!-- SEO & Metadata -->
+  <meta name="description"
+    content="Infinity Liquor Shop — Premium spirits, wines & beers delivered to your door in Florissant, MO. Order online, fast delivery within 10km." />
   <meta name="theme-color" content="#0a0805" />
+  <meta property="og:title" content="Infinity Liquor Shop — Premium Spirits Delivered" />
+  <meta property="og:description"
+    content="Curated selection of fine whiskeys, wines & spirits. Fast home delivery within 10km of Florissant, MO." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://infinityliquor.com" />
+  <meta property="og:image" content="https://infinityliquor.com/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <title>Infinity Liquor Shop — Premium Spirits Delivered</title>
 
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LiquorStore",
+    "name": "Infinity Liquor Shop",
+    "image": "https://infinityliquor.com/assets/logo.png",
+    "@id": "",
+    "url": "https://infinityliquor.com",
+    "telephone": "+13145550100",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2975 Patterson Rd",
+      "addressLocality": "Florissant",
+      "addressRegion": "MO",
+      "postalCode": "63031",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 38.7895,
+      "longitude": -90.3227
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "10:00",
+      "closes": "21:00"
+    }
+  }
+  </script>
+
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥃</text></svg>" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥃</text></svg>" />
 
   <!-- Google Fonts: Cormorant Garamond + DM Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Cinzel:wght@400;500;600&display=swap"
+    rel="stylesheet" />
 
   <!-- AOS — Animate On Scroll -->
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
@@ -25,6 +78,7 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/animations.css" />
 </head>
+
 <body>
 
   <!-- ============================================================ -->
@@ -107,12 +161,19 @@
       <div class="navbar__actions">
         <!-- Search -->
         <button id="search-toggle" class="navbar__icon-btn" aria-label="Search">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
         </button>
 
         <!-- Cart -->
         <button id="cart-toggle" class="navbar__icon-btn navbar__cart-btn" aria-label="Shopping cart">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
+          </svg>
           <span id="cart-count" class="cart-badge" aria-live="polite">0</span>
         </button>
 
@@ -127,20 +188,32 @@
           <button class="user-menu__trigger" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false">
             <span class="user-menu__avatar" id="user-avatar-initials">JD</span>
             <span class="user-menu__name" id="user-display-name">Jay</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
           </button>
           <div class="user-menu__dropdown" id="user-dropdown">
             <a href="#" id="my-orders-link" class="user-menu__item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+                <rect x="9" y="3" width="6" height="4" rx="1" />
+              </svg>
               My Orders
             </a>
             <a href="#" id="profile-link" class="user-menu__item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
               Profile
             </a>
             <div class="user-menu__divider"></div>
             <button id="logout-btn" class="user-menu__item user-menu__item--danger">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
               Sign Out
             </button>
           </div>
@@ -171,7 +244,8 @@
     <div id="search-bar" class="search-bar search-bar--hidden">
       <div class="container">
         <div class="search-bar__inner">
-          <input type="search" id="search-input" class="search-bar__input" placeholder="Search whiskey, vodka, wine…" autocomplete="off" />
+          <input type="search" id="search-input" class="search-bar__input" placeholder="Search whiskey, vodka, wine…"
+            autocomplete="off" />
           <button id="search-clear" class="search-bar__clear" aria-label="Clear search">&times;</button>
         </div>
       </div>
@@ -207,7 +281,9 @@
       <div class="hero__actions" data-aos="fade-up" data-aos-delay="500">
         <a href="#products" class="btn btn--gold btn--lg hero__cta">
           <span>Shop Now</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
         </a>
         <a href="#categories" class="btn btn--ghost btn--lg">Browse Categories</a>
       </div>
@@ -393,22 +469,34 @@
           <span class="section-label">Our Story</span>
           <h2 class="section-title">Infinity Liquor Shop</h2>
           <p class="about__text">
-            Located in the heart of Florissant, Missouri, Infinity Liquor Shop has been the community's go-to destination for premium spirits, fine wines, and craft beers. We believe great drinks deserve to be enjoyed in great company — including your home.
+            Located in the heart of Florissant, Missouri, Infinity Liquor Shop has been the community's go-to
+            destination for premium spirits, fine wines, and craft beers. We believe great drinks deserve to be enjoyed
+            in great company — including your home.
           </p>
           <p class="about__text">
-            Our curated selection spans over 500 products from around the world. Every bottle on our shelves is chosen with care, from aged single malts to vibrant natural wines.
+            Our curated selection spans over 500 products from around the world. Every bottle on our shelves is chosen
+            with care, from aged single malts to vibrant natural wines.
           </p>
           <div class="about__details">
             <div class="about__detail">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
               <span>2975 Patterson Rd, Florissant, MO 63031</span>
             </div>
             <div class="about__detail">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.13 1 .38 1.98.76 2.91a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.06-1.06a2 2 0 0 1 2.11-.45c.93.38 1.91.63 2.91.76A2 2 0 0 1 22 16.92z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.13 1 .38 1.98.76 2.91a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.06-1.06a2 2 0 0 1 2.11-.45c.93.38 1.91.63 2.91.76A2 2 0 0 1 22 16.92z" />
+              </svg>
               <span>(314) 555-0100</span>
             </div>
             <div class="about__detail">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
               <span>Mon–Sat: 10:00 AM – 9:00 PM · Sunday: Closed</span>
             </div>
           </div>
@@ -475,11 +563,13 @@
             </div>
             <div class="form-group">
               <label for="contact-email" class="form-label">Email Address</label>
-              <input type="email" id="contact-email" name="email" class="form-input" placeholder="your@email.com" required />
+              <input type="email" id="contact-email" name="email" class="form-input" placeholder="your@email.com"
+                required />
             </div>
             <div class="form-group">
               <label for="contact-message" class="form-label">Message</label>
-              <textarea id="contact-message" name="message" class="form-input form-textarea" placeholder="How can we help?" rows="4" required></textarea>
+              <textarea id="contact-message" name="message" class="form-input form-textarea"
+                placeholder="How can we help?" rows="4" required></textarea>
             </div>
             <button type="submit" class="btn btn--gold btn--full">Send Message</button>
           </form>
@@ -505,13 +595,22 @@
           <p class="footer__tagline">Premium spirits, wines & beers.<br />Delivered to your door.</p>
           <div class="footer__social">
             <a href="#" class="footer__social-link" aria-label="Facebook">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
             </a>
             <a href="#" class="footer__social-link" aria-label="Instagram">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
             </a>
             <a href="#" class="footer__social-link" aria-label="Twitter/X">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
             </a>
           </div>
         </div>
@@ -598,7 +697,11 @@
         Proceed to Checkout
       </button>
       <p class="cart-sidebar__note">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
         Delivery available within 10km only
       </p>
     </div>
@@ -608,7 +711,8 @@
   <!-- AUTH MODAL -->
   <!-- ============================================================ -->
   <div id="auth-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
-  <div id="auth-modal" class="modal auth-modal modal--hidden" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+  <div id="auth-modal" class="modal auth-modal modal--hidden" role="dialog" aria-modal="true"
+    aria-labelledby="auth-modal-title">
     <button class="modal__close" id="auth-modal-close" aria-label="Close">&times;</button>
 
     <!-- Tabs -->
@@ -626,14 +730,20 @@
       <form id="login-form" novalidate>
         <div class="form-group">
           <label for="login-email" class="form-label">Email Address</label>
-          <input type="email" id="login-email" class="form-input" placeholder="your@email.com" required autocomplete="email" />
+          <input type="email" id="login-email" class="form-input" placeholder="your@email.com" required
+            autocomplete="email" />
         </div>
         <div class="form-group">
           <label for="login-password" class="form-label">Password</label>
           <div class="form-input-wrap">
-            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
-            <button type="button" class="form-eye-toggle" data-target="login-password" aria-label="Toggle password visibility">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required
+              autocomplete="current-password" />
+            <button type="button" class="form-eye-toggle" data-target="login-password"
+              aria-label="Toggle password visibility">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
             </button>
           </div>
         </div>
@@ -662,7 +772,8 @@
         <div class="form-row">
           <div class="form-group">
             <label for="signup-name" class="form-label">Full Name</label>
-            <input type="text" id="signup-name" class="form-input" placeholder="John Doe" required autocomplete="name" />
+            <input type="text" id="signup-name" class="form-input" placeholder="John Doe" required
+              autocomplete="name" />
           </div>
           <div class="form-group">
             <label for="signup-phone" class="form-label">Phone Number</label>
@@ -671,18 +782,25 @@
         </div>
         <div class="form-group">
           <label for="signup-email" class="form-label">Email Address</label>
-          <input type="email" id="signup-email" class="form-input" placeholder="your@email.com" required autocomplete="email" />
+          <input type="email" id="signup-email" class="form-input" placeholder="your@email.com" required
+            autocomplete="email" />
         </div>
         <div class="form-group">
-          <label for="signup-dob" class="form-label">Date of Birth <span class="form-label--note">(Must be 21+)</span></label>
+          <label for="signup-dob" class="form-label">Date of Birth <span class="form-label--note">(Must be
+              21+)</span></label>
           <input type="date" id="signup-dob" class="form-input" required />
         </div>
         <div class="form-group">
           <label for="signup-password" class="form-label">Password</label>
           <div class="form-input-wrap">
-            <input type="password" id="signup-password" class="form-input" placeholder="Min 8 characters" required autocomplete="new-password" minlength="8" />
-            <button type="button" class="form-eye-toggle" data-target="signup-password" aria-label="Toggle password visibility">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <input type="password" id="signup-password" class="form-input" placeholder="Min 8 characters" required
+              autocomplete="new-password" minlength="8" />
+            <button type="button" class="form-eye-toggle" data-target="signup-password"
+              aria-label="Toggle password visibility">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
             </button>
           </div>
           <div class="password-strength" id="password-strength">
@@ -734,7 +852,8 @@
   <!-- CHECKOUT MODAL -->
   <!-- ============================================================ -->
   <div id="checkout-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
-  <div id="checkout-modal" class="modal checkout-modal modal--hidden" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+  <div id="checkout-modal" class="modal checkout-modal modal--hidden" role="dialog" aria-modal="true"
+    aria-labelledby="checkout-title">
     <button class="modal__close" id="checkout-modal-close" aria-label="Close">&times;</button>
     <h2 id="checkout-title" class="modal__title">Checkout</h2>
 
@@ -763,22 +882,26 @@
       <form id="delivery-form" novalidate>
         <div class="form-group">
           <label for="delivery-street" class="form-label">Street Address</label>
-          <input type="text" id="delivery-street" class="form-input" placeholder="123 Main St, Apt 4" required autocomplete="street-address" />
+          <input type="text" id="delivery-street" class="form-input" placeholder="123 Main St, Apt 4" required
+            autocomplete="street-address" />
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="delivery-city" class="form-label">City</label>
-            <input type="text" id="delivery-city" class="form-input" placeholder="Florissant" required autocomplete="address-level2" />
+            <input type="text" id="delivery-city" class="form-input" placeholder="Florissant" required
+              autocomplete="address-level2" />
           </div>
           <div class="form-group">
             <label for="delivery-state" class="form-label">State</label>
-            <input type="text" id="delivery-state" class="form-input" placeholder="MO" required autocomplete="address-level1" maxlength="2" />
+            <input type="text" id="delivery-state" class="form-input" placeholder="MO" required
+              autocomplete="address-level1" maxlength="2" />
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="delivery-zip" class="form-label">ZIP Code</label>
-            <input type="text" id="delivery-zip" class="form-input" placeholder="63031" required autocomplete="postal-code" maxlength="5" />
+            <input type="text" id="delivery-zip" class="form-input" placeholder="63031" required
+              autocomplete="postal-code" maxlength="5" />
           </div>
           <div class="form-group">
             <label for="delivery-lat" class="form-label">
@@ -793,7 +916,8 @@
           <input type="number" id="delivery-lng" class="form-input" placeholder="-90.3227" step="0.0001" required />
         </div>
         <div class="form-group">
-          <label for="delivery-notes" class="form-label">Delivery Notes <span class="form-label--note">(optional)</span></label>
+          <label for="delivery-notes" class="form-label">Delivery Notes <span
+              class="form-label--note">(optional)</span></label>
           <input type="text" id="delivery-notes" class="form-input" placeholder="Gate code, apartment number, etc." />
         </div>
         <div id="radius-check-result" class="radius-result" style="display:none;"></div>
@@ -867,7 +991,9 @@
     <div class="order-success__content">
       <div class="order-success__animation">
         <div class="order-success__circle">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </div>
       </div>
       <h2 class="order-success__title">Order Placed!</h2>
@@ -890,7 +1016,8 @@
   <!-- MY ORDERS MODAL -->
   <!-- ============================================================ -->
   <div id="orders-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
-  <div id="orders-modal" class="modal orders-modal modal--hidden" role="dialog" aria-modal="true" aria-labelledby="orders-title">
+  <div id="orders-modal" class="modal orders-modal modal--hidden" role="dialog" aria-modal="true"
+    aria-labelledby="orders-title">
     <button class="modal__close" id="orders-modal-close" aria-label="Close">&times;</button>
     <h2 id="orders-title" class="modal__title">My Orders</h2>
     <div id="orders-list" class="orders-list">
@@ -910,10 +1037,57 @@
   </div>
 
   <!-- ============================================================ -->
+  <!-- PROFILE MODAL -->
+  <!-- ============================================================ -->
+  <div id="profile-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
+  <div id="profile-modal" class="modal profile-modal modal--hidden" role="dialog" aria-modal="true"
+    aria-labelledby="profile-title">
+    <button class="modal__close" id="profile-modal-close" aria-label="Close">&times;</button>
+    <h2 id="profile-title" class="modal__title">My Profile</h2>
+    <div class="profile__content">
+      <form id="profile-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-name" class="form-label">Full Name</label>
+            <input type="text" id="profile-name" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label for="profile-phone" class="form-label">Phone</label>
+            <input type="tel" id="profile-phone" class="form-input" />
+          </div>
+        </div>
+        <h3 class="checkout-pane__title" style="margin-top:20px;">Saved Address</h3>
+        <div class="form-group">
+          <label for="profile-street" class="form-label">Street</label>
+          <input type="text" id="profile-street" class="form-input" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-city" class="form-label">City</label>
+            <input type="text" id="profile-city" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="profile-state" class="form-label">State</label>
+            <input type="text" id="profile-state" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="profile-zip" class="form-label">ZIP</label>
+            <input type="text" id="profile-zip" class="form-input" />
+          </div>
+        </div>
+        <div id="profile-msg" style="margin-top:10px; font-size:14px;"></div>
+        <button type="submit" class="btn btn--gold btn--full" style="margin-top:20px;">Save Profile</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
   <!-- BACK TO TOP BUTTON -->
   <!-- ============================================================ -->
   <button id="back-to-top" class="back-to-top back-to-top--hidden" aria-label="Back to top">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="18 15 12 9 6 15" />
+    </svg>
   </button>
 
   <!-- ============================================================ -->
@@ -924,23 +1098,7 @@
 
   <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- AOS -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
-  <!-- Toastify -->
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-  <!-- App Scripts (order matters) -->
-  <script src="js/auth.js"></script>
-  <script src="js/location.js"></script>
-  <script src="js/products.js"></script>
-  <script src="js/orders.js"></script>
-  <script src="js/payment.js"></script>
   <script src="js/app.js"></script>
 </body>
+
 </html>

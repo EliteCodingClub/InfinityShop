@@ -208,7 +208,7 @@
     grid.innerHTML = visible.map((product) => `
       <article class="product-card" data-id="${product.id}">
         <div class="product-card__media">
-          <img src="${productImage(product)}" alt="${escapeHtml(product.name)}">
+          <img loading="lazy" src="${productImage(product)}" alt="${escapeHtml(product.name)}">
           ${product.is_featured ? '<span class="product-card__badge">Featured</span>' : ""}
         </div>
         <div class="product-card__body">
@@ -241,7 +241,7 @@
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function addToCart(productId, quantity = 1) {
+  function addToCart(productId, quantity = 1, event = null) {
     const product = productState.products.find((item) => item.id === productId);
     if (!product) return;
     if (Number(product.stock) <= 0) {
@@ -262,6 +262,34 @@
     saveCart();
     updateCartUI();
     toast("Added to cart.", "success");
+
+    // Fly-to-cart animation
+    if (event && event.target) {
+      const btn = event.target;
+      const cartIcon = $("#cart-toggle");
+      if (!cartIcon) return;
+      
+      const btnRect = btn.getBoundingClientRect();
+      const cartRect = cartIcon.getBoundingClientRect();
+      
+      const ghost = document.createElement("img");
+      ghost.src = productImage(product);
+      ghost.className = "fly-to-cart";
+      ghost.style.width = "50px";
+      ghost.style.height = "50px";
+      ghost.style.objectFit = "cover";
+      ghost.style.borderRadius = "8px";
+      ghost.style.left = \`\${btnRect.left + btnRect.width / 2 - 25}px\`;
+      ghost.style.top = \`\${btnRect.top - 25}px\`;
+      
+      const tx = cartRect.left - (btnRect.left + btnRect.width / 2 - 25);
+      const ty = cartRect.top - (btnRect.top - 25);
+      ghost.style.setProperty("--tx", \`\${tx}px\`);
+      ghost.style.setProperty("--ty", \`\${ty}px\`);
+      
+      document.body.appendChild(ghost);
+      setTimeout(() => ghost.remove(), 800);
+    }
   }
 
   function setCartQuantity(productId, quantity) {
@@ -342,7 +370,7 @@
       const removeButton = event.target.closest("[data-cart-remove]");
 
       if (categoryButton) setCategory(categoryButton.dataset.category);
-      if (addButton) addToCart(addButton.dataset.addCart);
+      if (addButton) addToCart(addButton.dataset.addCart, 1, event);
       if (quickButton) openQuickView(quickButton.dataset.quickview);
       if (incButton) {
         const item = productState.cart.find((entry) => entry.productId === incButton.dataset.cartInc);
@@ -367,11 +395,19 @@
       renderProducts();
     });
 
-    $("#search-input")?.addEventListener("input", (event) => {
+    function debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    $("#search-input")?.addEventListener("input", debounce((event) => {
       productState.search = event.target.value.trim();
       productState.visibleCount = 12;
       renderProducts();
-    });
+    }, 300));
 
     $("#search-clear")?.addEventListener("click", () => {
       const input = $("#search-input");

@@ -95,3 +95,21 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+@keyframes flyToCart {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.1) translate(var(--tx, 0), var(--ty, 0));
+  }
+}
+
+.fly-to-cart {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  animation: flyToCart 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}

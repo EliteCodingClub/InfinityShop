@@ -23,6 +23,11 @@
       return;
     }
 
+    if (!InfinityApp.state.settings.is_open) {
+      toast("The store is currently closed. Please check our business hours.", "error");
+      return;
+    }
+
     const min = Number(InfinityApp.state.settings.min_order_amount || 20);
     if (InfinityApp.products.cartSubtotal() < min) {
       toast("Minimum order amount is " + formatCurrency(min) + ".", "warning");
