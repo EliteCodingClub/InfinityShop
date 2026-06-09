@@ -1673,3 +1673,120 @@ select.form-input,
     justify-self: start;
   }
 }
+
+/* ============================================================
+   LUXURY OVERRIDES (APPLE / PORSCHE / MACALLAN INSPIRED)
+   ============================================================ */
+:root {
+  --bg: #030303;
+  --bg-2: #0a0a0a;
+  --panel: rgba(20, 20, 20, 0.6);
+  --gold: #d4af37;
+  --gold-2: #f3e5ab;
+  --gold-dark: #aa8122;
+  --shadow-premium: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(24px) saturate(180%);
+}
+
+body {
+  background: 
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.15), transparent 40vw),
+    radial-gradient(circle at 100% 100%, rgba(170, 129, 34, 0.1), transparent 50vw),
+    #030303 !important;
+}
+
+.navbar {
+  background: rgba(3, 3, 3, 0.7) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border-bottom: var(--glass-border) !important;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.hero__title {
+  font-size: clamp(3rem, 8vw, 6rem) !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.02em !important;
+  background: linear-gradient(180deg, #fff 0%, #a0a0a0 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  line-height: 1.1 !important;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+}
+
+.hero__title-em {
+  font-family: var(--font-display) !important;
+  font-style: italic !important;
+  background: linear-gradient(135deg, var(--gold-2) 0%, var(--gold) 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  display: block !important;
+}
+
+.product-card, .category-card {
+  background: var(--panel) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: var(--glass-border) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-premium) !important;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease !important;
+}
+
+.product-card:hover, .category-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(212, 175, 55, 0.3) !important;
+}
+
+.product-card__media img {
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6)) !important;
+  transition: transform 0.6s ease !important;
+}
+
+.product-card:hover .product-card__media img {
+  transform: scale(1.08) rotate(2deg) !important;
+}
+
+.btn--gold {
+  background: linear-gradient(135deg, var(--gold-2), var(--gold-dark)) !important;
+  color: #000 !important;
+  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2) !important;
+  transition: all 0.3s ease !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn--gold:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4) !important;
+  filter: brightness(1.1) !important;
+}
+
+.modal {
+  background: rgba(10, 10, 10, 0.85) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: var(--glass-border) !important;
+  box-shadow: var(--shadow-premium) !important;
+}
+
+.cart-sidebar {
+  background: rgba(10, 10, 10, 0.85) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border-left: var(--glass-border) !important;
+}
