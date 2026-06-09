@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Infinity Liquor Shop — Premium spirits, wines & beers delivered to your door in Florissant, MO. Order online, fast delivery within 10km." />
+  <meta name="theme-color" content="#0a0805" />
+  <title>Infinity Liquor Shop — Premium Spirits Delivered</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥃</text></svg>" />
+
+  <!-- Google Fonts: Cormorant Garamond + DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- AOS — Animate On Scroll -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+  <!-- Toastify for notifications -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!-- GRAIN OVERLAY -->
+  <!-- ============================================================ -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- ============================================================ -->
+  <!-- AGE VERIFICATION GATE -->
+  <!-- ============================================================ -->
+  <div id="age-gate" class="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+    <div class="age-gate__backdrop"></div>
+    <div class="age-gate__card">
+      <div class="age-gate__logo">
+        <span class="age-gate__icon">🥃</span>
+        <h1 class="age-gate__brand">INFINITY</h1>
+        <p class="age-gate__tagline">Liquor Shop</p>
+      </div>
+      <div class="age-gate__divider"></div>
+      <h2 id="age-gate-title" class="age-gate__title">Age Verification Required</h2>
+      <p class="age-gate__text">
+        You must be <strong>21 years of age or older</strong> to enter this website.
+        By entering, you confirm you are of legal drinking age in your jurisdiction.
+      </p>
+      <p class="age-gate__law">
+        Missouri state law prohibits the sale of alcohol to persons under 21.
+      </p>
+      <div class="age-gate__actions">
+        <button id="age-gate-yes" class="btn btn--gold btn--lg">
+          I am 21 or older — Enter
+        </button>
+        <button id="age-gate-no" class="btn btn--ghost btn--sm">
+          I am under 21 — Exit
+        </button>
+      </div>
+      <p class="age-gate__disclaimer">
+        This site uses cookies to remember your age verification.
+        <a href="#" class="link--gold">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- LOCATION WARNING BANNER -->
+  <!-- ============================================================ -->
+  <div id="location-banner" class="location-banner location-banner--hidden" role="alert">
+    <div class="location-banner__inner">
+      <span class="location-banner__icon">📍</span>
+      <p id="location-banner-text" class="location-banner__text">
+        We deliver within <strong>10km</strong> of our store. Checking your location…
+      </p>
+      <button id="location-banner-close" class="location-banner__close" aria-label="Close">&times;</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- NAVBAR -->
+  <!-- ============================================================ -->
+  <header id="navbar" class="navbar">
+    <div class="navbar__inner container">
+
+      <!-- Logo -->
+      <a href="#" class="navbar__logo" aria-label="Infinity Liquor Shop home">
+        <span class="navbar__logo-icon">∞</span>
+        <div class="navbar__logo-text">
+          <span class="navbar__logo-name">INFINITY</span>
+          <span class="navbar__logo-sub">LIQUOR SHOP</span>
+        </div>
+      </a>
+
+      <!-- Nav Links -->
+      <nav class="navbar__nav" aria-label="Main navigation">
+        <a href="#products" class="navbar__link">Shop</a>
+        <a href="#categories" class="navbar__link">Categories</a>
+        <a href="#about" class="navbar__link">About</a>
+        <a href="#contact" class="navbar__link">Contact</a>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="navbar__actions">
+        <!-- Search -->
+        <button id="search-toggle" class="navbar__icon-btn" aria-label="Search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </button>
+
+        <!-- Cart -->
+        <button id="cart-toggle" class="navbar__icon-btn navbar__cart-btn" aria-label="Shopping cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span id="cart-count" class="cart-badge" aria-live="polite">0</span>
+        </button>
+
+        <!-- Auth Buttons (logged out) -->
+        <div id="auth-buttons" class="navbar__auth">
+          <button id="login-btn" class="btn btn--ghost btn--sm">Sign In</button>
+          <button id="signup-btn" class="btn btn--gold btn--sm">Sign Up</button>
+        </div>
+
+        <!-- User Menu (logged in) -->
+        <div id="user-menu" class="navbar__user user-menu user-menu--hidden">
+          <button class="user-menu__trigger" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false">
+            <span class="user-menu__avatar" id="user-avatar-initials">JD</span>
+            <span class="user-menu__name" id="user-display-name">Jay</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="user-menu__dropdown" id="user-dropdown">
+            <a href="#" id="my-orders-link" class="user-menu__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+              My Orders
+            </a>
+            <a href="#" id="profile-link" class="user-menu__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Profile
+            </a>
+            <div class="user-menu__divider"></div>
+            <button id="logout-btn" class="user-menu__item user-menu__item--danger">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-toggle" class="navbar__hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <div id="mobile-nav" class="mobile-nav mobile-nav--closed">
+      <nav class="mobile-nav__links">
+        <a href="#products" class="mobile-nav__link">Shop</a>
+        <a href="#categories" class="mobile-nav__link">Categories</a>
+        <a href="#about" class="mobile-nav__link">About</a>
+        <a href="#contact" class="mobile-nav__link">Contact</a>
+      </nav>
+      <div class="mobile-nav__auth" id="mobile-auth-buttons">
+        <button class="btn btn--ghost btn--full" id="mobile-login-btn">Sign In</button>
+        <button class="btn btn--gold btn--full" id="mobile-signup-btn">Sign Up</button>
+      </div>
+    </div>
+
+    <!-- Search Bar (slides down) -->
+    <div id="search-bar" class="search-bar search-bar--hidden">
+      <div class="container">
+        <div class="search-bar__inner">
+          <input type="search" id="search-input" class="search-bar__input" placeholder="Search whiskey, vodka, wine…" autocomplete="off" />
+          <button id="search-clear" class="search-bar__clear" aria-label="Clear search">&times;</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================ -->
+  <!-- HERO SECTION -->
+  <!-- ============================================================ -->
+  <section id="hero" class="hero">
+    <div class="hero__bg">
+      <div class="hero__bg-gradient"></div>
+      <div class="hero__particles" id="hero-particles" aria-hidden="true"></div>
+    </div>
+
+    <div class="hero__content container">
+      <div class="hero__badge" data-aos="fade-down" data-aos-delay="100">
+        <span class="hero__badge-dot"></span>
+        <span>Delivering within 10km · Florissant, MO</span>
+      </div>
+
+      <h1 class="hero__title" data-aos="fade-up" data-aos-delay="200">
+        <span class="hero__title-line">Premium Spirits</span>
+        <em class="hero__title-em">Delivered to</em>
+        <span class="hero__title-line">Your Door</span>
+      </h1>
+
+      <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="350">
+        Curated selection of fine whiskeys, wines & spirits.<br />
+        Fast home delivery · Age 21+ only
+      </p>
+
+      <div class="hero__actions" data-aos="fade-up" data-aos-delay="500">
+        <a href="#products" class="btn btn--gold btn--lg hero__cta">
+          <span>Shop Now</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+        <a href="#categories" class="btn btn--ghost btn--lg">Browse Categories</a>
+      </div>
+
+      <div class="hero__stats" data-aos="fade-up" data-aos-delay="650">
+        <div class="hero__stat">
+          <span class="hero__stat-num">500+</span>
+          <span class="hero__stat-label">Products</span>
+        </div>
+        <div class="hero__stat-divider"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">10km</span>
+          <span class="hero__stat-label">Delivery Zone</span>
+        </div>
+        <div class="hero__stat-divider"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">21+</span>
+          <span class="hero__stat-label">Age Verified</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- MARQUEE STRIP -->
+  <!-- ============================================================ -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track">
+      <span>🥃 Whiskey</span><span>·</span>
+      <span>🍸 Vodka</span><span>·</span>
+      <span>🍹 Rum</span><span>·</span>
+      <span>🌵 Tequila</span><span>·</span>
+      <span>🌿 Gin</span><span>·</span>
+      <span>🍷 Wine</span><span>·</span>
+      <span>🍺 Beer</span><span>·</span>
+      <span>🥂 Champagne</span><span>·</span>
+      <span>🍶 Brandy</span><span>·</span>
+      <span>🥃 Whiskey</span><span>·</span>
+      <span>🍸 Vodka</span><span>·</span>
+      <span>🍹 Rum</span><span>·</span>
+      <span>🌵 Tequila</span><span>·</span>
+      <span>🌿 Gin</span><span>·</span>
+      <span>🍷 Wine</span><span>·</span>
+      <span>🍺 Beer</span><span>·</span>
+      <span>🥂 Champagne</span><span>·</span>
+      <span>🍶 Brandy</span><span>·</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- CATEGORIES SECTION -->
+  <!-- ============================================================ -->
+  <section id="categories" class="section categories">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-label">Browse By</span>
+        <h2 class="section-title">Categories</h2>
+        <p class="section-subtitle">From single malts to sparkling wines — find your perfect pour.</p>
+      </div>
+
+      <div class="categories__grid" id="categories-grid">
+        <!-- Populated by JS from Supabase -->
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+        <div class="category-card skeleton" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FEATURED / PRODUCTS SECTION -->
+  <!-- ============================================================ -->
+  <section id="products" class="section products">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-label">Our Selection</span>
+        <h2 class="section-title">Premium Spirits</h2>
+        <p class="section-subtitle">Hand-picked for quality. Delivered with care.</p>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="products__filters" data-aos="fade-up" data-aos-delay="100">
+        <button class="filter-btn filter-btn--active" data-category="all">All</button>
+        <!-- More filter buttons added by JS -->
+      </div>
+
+      <!-- Sort Bar -->
+      <div class="products__sort" data-aos="fade-up" data-aos-delay="150">
+        <label for="sort-select" class="products__sort-label">Sort by:</label>
+        <select id="sort-select" class="products__sort-select">
+          <option value="featured">Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Name A–Z</option>
+          <option value="stock-desc">Most in Stock</option>
+        </select>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="products__grid" id="products-grid">
+        <!-- Populated by JS -->
+        <div class="product-card skeleton" aria-hidden="true"></div>
+        <div class="product-card skeleton" aria-hidden="true"></div>
+        <div class="product-card skeleton" aria-hidden="true"></div>
+        <div class="product-card skeleton" aria-hidden="true"></div>
+        <div class="product-card skeleton" aria-hidden="true"></div>
+        <div class="product-card skeleton" aria-hidden="true"></div>
+        <div class="product-card skeleton" aria-hidden="true"></div>
+        <div class="product-card skeleton" aria-hidden="true"></div>
+      </div>
+
+      <!-- Load More -->
+      <div class="products__load-more" id="load-more-container" style="display:none;">
+        <button id="load-more-btn" class="btn btn--ghost btn--lg">Load More</button>
+      </div>
+
+      <!-- Empty state -->
+      <div id="products-empty" class="products__empty" style="display:none;">
+        <span class="products__empty-icon">🔍</span>
+        <p>No products found. Try a different category or search.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- DELIVERY INFO BANNER -->
+  <!-- ============================================================ -->
+  <section class="delivery-banner" data-aos="fade-up">
+    <div class="container">
+      <div class="delivery-banner__grid">
+        <div class="delivery-banner__item">
+          <span class="delivery-banner__icon">📍</span>
+          <div>
+            <h3>10km Delivery Zone</h3>
+            <p>We deliver within 10 kilometers of our Florissant, MO store.</p>
+          </div>
+        </div>
+        <div class="delivery-banner__item">
+          <span class="delivery-banner__icon">🪪</span>
+          <div>
+            <h3>ID Required on Delivery</h3>
+            <p>Valid government-issued ID required. Must be 21+.</p>
+          </div>
+        </div>
+        <div class="delivery-banner__item">
+          <span class="delivery-banner__icon">💳</span>
+          <div>
+            <h3>COD or Apple Pay</h3>
+            <p>Pay cash on delivery (+$5 fee) or Apple Pay online.</p>
+          </div>
+        </div>
+        <div class="delivery-banner__item">
+          <span class="delivery-banner__icon">⏱️</span>
+          <div>
+            <h3>Fast Delivery</h3>
+            <p>Orders dispatched same day. Mon–Sat 10AM–9PM.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- ABOUT SECTION -->
+  <!-- ============================================================ -->
+  <section id="about" class="section about">
+    <div class="container">
+      <div class="about__grid">
+        <div class="about__content" data-aos="fade-right">
+          <span class="section-label">Our Story</span>
+          <h2 class="section-title">Infinity Liquor Shop</h2>
+          <p class="about__text">
+            Located in the heart of Florissant, Missouri, Infinity Liquor Shop has been the community's go-to destination for premium spirits, fine wines, and craft beers. We believe great drinks deserve to be enjoyed in great company — including your home.
+          </p>
+          <p class="about__text">
+            Our curated selection spans over 500 products from around the world. Every bottle on our shelves is chosen with care, from aged single malts to vibrant natural wines.
+          </p>
+          <div class="about__details">
+            <div class="about__detail">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>2975 Patterson Rd, Florissant, MO 63031</span>
+            </div>
+            <div class="about__detail">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.13 1 .38 1.98.76 2.91a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.06-1.06a2 2 0 0 1 2.11-.45c.93.38 1.91.63 2.91.76A2 2 0 0 1 22 16.92z"/></svg>
+              <span>(314) 555-0100</span>
+            </div>
+            <div class="about__detail">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Mon–Sat: 10:00 AM – 9:00 PM · Sunday: Closed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about__visual" data-aos="fade-left" data-aos-delay="200">
+          <div class="about__visual-card">
+            <div class="about__visual-inner">
+              <span class="about__visual-icon">∞</span>
+              <p class="about__visual-motto">"Infinite choices,<br /><em>one perfect pour."</em></p>
+            </div>
+            <div class="about__hours">
+              <h4 class="about__hours-title">Store Hours</h4>
+              <ul class="about__hours-list">
+                <li><span>Monday</span><span>10AM – 9PM</span></li>
+                <li><span>Tuesday</span><span>10AM – 9PM</span></li>
+                <li><span>Wednesday</span><span>10AM – 9PM</span></li>
+                <li><span>Thursday</span><span>10AM – 9PM</span></li>
+                <li><span>Friday</span><span>10AM – 9PM</span></li>
+                <li><span>Saturday</span><span>10AM – 9PM</span></li>
+                <li class="closed"><span>Sunday</span><span>Closed</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CONTACT SECTION -->
+  <!-- ============================================================ -->
+  <section id="contact" class="section contact">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-label">Get In Touch</span>
+        <h2 class="section-title">Contact Us</h2>
+      </div>
+      <div class="contact__grid">
+        <div class="contact__info" data-aos="fade-right">
+          <div class="contact__card">
+            <h3>Visit Us</h3>
+            <p>2975 Patterson Rd<br />Florissant, MO 63031<br />United States</p>
+          </div>
+          <div class="contact__card">
+            <h3>Call Us</h3>
+            <p><a href="tel:+13145550100" class="link--gold">(314) 555-0100</a></p>
+          </div>
+          <div class="contact__card">
+            <h3>Email Us</h3>
+            <p><a href="mailto:info@infinityliquor.com" class="link--gold">info@infinityliquor.com</a></p>
+          </div>
+          <div class="contact__card">
+            <h3>Delivery Zone</h3>
+            <p>We deliver within <strong>10km</strong> of our store.<br />Enter your address at checkout to verify.</p>
+          </div>
+        </div>
+        <div class="contact__form-wrap" data-aos="fade-left" data-aos-delay="150">
+          <form id="contact-form" class="contact__form" novalidate>
+            <h3 class="contact__form-title">Send a Message</h3>
+            <div class="form-group">
+              <label for="contact-name" class="form-label">Full Name</label>
+              <input type="text" id="contact-name" name="name" class="form-input" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label for="contact-email" class="form-label">Email Address</label>
+              <input type="email" id="contact-email" name="email" class="form-input" placeholder="your@email.com" required />
+            </div>
+            <div class="form-group">
+              <label for="contact-message" class="form-label">Message</label>
+              <textarea id="contact-message" name="message" class="form-input form-textarea" placeholder="How can we help?" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn--gold btn--full">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER -->
+  <!-- ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="footer__logo">
+            <span class="footer__logo-icon">∞</span>
+            <div>
+              <span class="footer__logo-name">INFINITY</span>
+              <span class="footer__logo-sub">LIQUOR SHOP</span>
+            </div>
+          </div>
+          <p class="footer__tagline">Premium spirits, wines & beers.<br />Delivered to your door.</p>
+          <div class="footer__social">
+            <a href="#" class="footer__social-link" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" class="footer__social-link" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="footer__social-link" aria-label="Twitter/X">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4 class="footer__col-title">Quick Links</h4>
+            <ul>
+              <li><a href="#products">Shop All</a></li>
+              <li><a href="#categories">Categories</a></li>
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Account</h4>
+            <ul>
+              <li><a href="#" id="footer-login">Sign In</a></li>
+              <li><a href="#" id="footer-signup">Create Account</a></li>
+              <li><a href="#" id="footer-orders">My Orders</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__col-title">Legal</h4>
+            <ul>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Delivery Policy</a></li>
+              <li><a href="#">Refund Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__legal">
+          ⚠️ Must be 21 or older to purchase. Please drink responsibly. Do not drink and drive.
+        </p>
+        <p class="footer__copy">
+          © 2025 Infinity Liquor Shop. All rights reserved. · Florissant, MO
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================ -->
+  <!-- CART SIDEBAR -->
+  <!-- ============================================================ -->
+  <div id="cart-overlay" class="cart-overlay cart-overlay--hidden" aria-hidden="true"></div>
+  <aside id="cart-sidebar" class="cart-sidebar cart-sidebar--closed" role="complementary" aria-label="Shopping cart">
+    <div class="cart-sidebar__header">
+      <h2 class="cart-sidebar__title">Your Cart</h2>
+      <button id="cart-close" class="cart-sidebar__close" aria-label="Close cart">&times;</button>
+    </div>
+
+    <!-- Cart Items -->
+    <div id="cart-items" class="cart-sidebar__items">
+      <!-- Empty state -->
+      <div id="cart-empty" class="cart-empty">
+        <span class="cart-empty__icon">🛒</span>
+        <p>Your cart is empty</p>
+        <a href="#products" class="btn btn--gold btn--sm" id="cart-shop-btn">Start Shopping</a>
+      </div>
+      <!-- Items populated by JS -->
+    </div>
+
+    <!-- Cart Footer -->
+    <div id="cart-footer" class="cart-sidebar__footer cart-sidebar__footer--hidden">
+      <div class="cart-summary">
+        <div class="cart-summary__row">
+          <span>Subtotal</span>
+          <span id="cart-subtotal">$0.00</span>
+        </div>
+        <div class="cart-summary__row" id="cod-fee-row" style="display:none;">
+          <span>COD Fee</span>
+          <span>$5.00</span>
+        </div>
+        <div class="cart-summary__row cart-summary__row--total">
+          <span>Total</span>
+          <span id="cart-total">$0.00</span>
+        </div>
+      </div>
+      <button id="checkout-btn" class="btn btn--gold btn--full btn--lg">
+        Proceed to Checkout
+      </button>
+      <p class="cart-sidebar__note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Delivery available within 10km only
+      </p>
+    </div>
+  </aside>
+
+  <!-- ============================================================ -->
+  <!-- AUTH MODAL -->
+  <!-- ============================================================ -->
+  <div id="auth-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
+  <div id="auth-modal" class="modal auth-modal modal--hidden" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+    <button class="modal__close" id="auth-modal-close" aria-label="Close">&times;</button>
+
+    <!-- Tabs -->
+    <div class="auth-modal__tabs">
+      <button class="auth-tab auth-tab--active" id="tab-login" data-tab="login">Sign In</button>
+      <button class="auth-tab" id="tab-signup" data-tab="signup">Sign Up</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login" class="auth-form auth-form--active">
+      <div class="auth-modal__header">
+        <h2 id="auth-modal-title" class="auth-modal__title">Welcome Back</h2>
+        <p class="auth-modal__subtitle">Sign in to place orders and track deliveries.</p>
+      </div>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="login-email" class="form-label">Email Address</label>
+          <input type="email" id="login-email" class="form-input" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="login-password" class="form-label">Password</label>
+          <div class="form-input-wrap">
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
+            <button type="button" class="form-eye-toggle" data-target="login-password" aria-label="Toggle password visibility">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-group form-group--row">
+          <a href="#" id="forgot-password-link" class="link--gold form-link">Forgot password?</a>
+        </div>
+        <div id="login-error" class="form-error" style="display:none;"></div>
+        <button type="submit" class="btn btn--gold btn--full" id="login-submit">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-loader" style="display:none;">…</span>
+        </button>
+      </form>
+      <p class="auth-modal__switch">
+        Don't have an account?
+        <button class="link--gold auth-switch-btn" data-target="signup">Sign Up</button>
+      </p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="form-signup" class="auth-form">
+      <div class="auth-modal__header">
+        <h2 class="auth-modal__title">Create Account</h2>
+        <p class="auth-modal__subtitle">Join to order premium spirits for home delivery.</p>
+      </div>
+      <form id="signup-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="signup-name" class="form-label">Full Name</label>
+            <input type="text" id="signup-name" class="form-input" placeholder="John Doe" required autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label for="signup-phone" class="form-label">Phone Number</label>
+            <input type="tel" id="signup-phone" class="form-input" placeholder="(314) 555-0000" autocomplete="tel" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="signup-email" class="form-label">Email Address</label>
+          <input type="email" id="signup-email" class="form-input" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="signup-dob" class="form-label">Date of Birth <span class="form-label--note">(Must be 21+)</span></label>
+          <input type="date" id="signup-dob" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label for="signup-password" class="form-label">Password</label>
+          <div class="form-input-wrap">
+            <input type="password" id="signup-password" class="form-input" placeholder="Min 8 characters" required autocomplete="new-password" minlength="8" />
+            <button type="button" class="form-eye-toggle" data-target="signup-password" aria-label="Toggle password visibility">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="password-strength" id="password-strength">
+            <div class="password-strength__bar"><span id="password-strength-fill"></span></div>
+            <span id="password-strength-text"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="signup-terms" required />
+            <span class="checkbox-custom"></span>
+            <span>I confirm I am 21+ and agree to the <a href="#" class="link--gold">Terms of Service</a></span>
+          </label>
+        </div>
+        <div id="signup-error" class="form-error" style="display:none;"></div>
+        <button type="submit" class="btn btn--gold btn--full" id="signup-submit">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-loader" style="display:none;">…</span>
+        </button>
+      </form>
+      <p class="auth-modal__switch">
+        Already have an account?
+        <button class="link--gold auth-switch-btn" data-target="login">Sign In</button>
+      </p>
+    </div>
+
+    <!-- FORGOT PASSWORD -->
+    <div id="form-forgot" class="auth-form">
+      <div class="auth-modal__header">
+        <h2 class="auth-modal__title">Reset Password</h2>
+        <p class="auth-modal__subtitle">Enter your email and we'll send a reset link.</p>
+      </div>
+      <form id="forgot-form" novalidate>
+        <div class="form-group">
+          <label for="forgot-email" class="form-label">Email Address</label>
+          <input type="email" id="forgot-email" class="form-input" placeholder="your@email.com" required />
+        </div>
+        <div id="forgot-error" class="form-error" style="display:none;"></div>
+        <div id="forgot-success" class="form-success" style="display:none;"></div>
+        <button type="submit" class="btn btn--gold btn--full">Send Reset Link</button>
+      </form>
+      <p class="auth-modal__switch">
+        <button class="link--gold auth-switch-btn" data-target="login">← Back to Sign In</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- CHECKOUT MODAL -->
+  <!-- ============================================================ -->
+  <div id="checkout-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
+  <div id="checkout-modal" class="modal checkout-modal modal--hidden" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+    <button class="modal__close" id="checkout-modal-close" aria-label="Close">&times;</button>
+    <h2 id="checkout-title" class="modal__title">Checkout</h2>
+
+    <!-- Step Indicator -->
+    <div class="checkout-steps">
+      <div class="checkout-step checkout-step--active" data-step="1">
+        <span class="checkout-step__num">1</span>
+        <span class="checkout-step__label">Delivery</span>
+      </div>
+      <div class="checkout-step__line"></div>
+      <div class="checkout-step" data-step="2">
+        <span class="checkout-step__num">2</span>
+        <span class="checkout-step__label">Payment</span>
+      </div>
+      <div class="checkout-step__line"></div>
+      <div class="checkout-step" data-step="3">
+        <span class="checkout-step__num">3</span>
+        <span class="checkout-step__label">Confirm</span>
+      </div>
+    </div>
+
+    <!-- Step 1: Delivery Address -->
+    <div id="checkout-step-1" class="checkout-pane checkout-pane--active">
+      <h3 class="checkout-pane__title">Delivery Address</h3>
+      <div id="location-status" class="location-status"></div>
+      <form id="delivery-form" novalidate>
+        <div class="form-group">
+          <label for="delivery-street" class="form-label">Street Address</label>
+          <input type="text" id="delivery-street" class="form-input" placeholder="123 Main St, Apt 4" required autocomplete="street-address" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="delivery-city" class="form-label">City</label>
+            <input type="text" id="delivery-city" class="form-input" placeholder="Florissant" required autocomplete="address-level2" />
+          </div>
+          <div class="form-group">
+            <label for="delivery-state" class="form-label">State</label>
+            <input type="text" id="delivery-state" class="form-input" placeholder="MO" required autocomplete="address-level1" maxlength="2" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="delivery-zip" class="form-label">ZIP Code</label>
+            <input type="text" id="delivery-zip" class="form-input" placeholder="63031" required autocomplete="postal-code" maxlength="5" />
+          </div>
+          <div class="form-group">
+            <label for="delivery-lat" class="form-label">
+              Latitude
+              <button type="button" id="detect-location-btn" class="btn btn--ghost btn--xs">📍 Detect</button>
+            </label>
+            <input type="number" id="delivery-lat" class="form-input" placeholder="38.7895" step="0.0001" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="delivery-lng" class="form-label">Longitude</label>
+          <input type="number" id="delivery-lng" class="form-input" placeholder="-90.3227" step="0.0001" required />
+        </div>
+        <div class="form-group">
+          <label for="delivery-notes" class="form-label">Delivery Notes <span class="form-label--note">(optional)</span></label>
+          <input type="text" id="delivery-notes" class="form-input" placeholder="Gate code, apartment number, etc." />
+        </div>
+        <div id="radius-check-result" class="radius-result" style="display:none;"></div>
+        <button type="button" id="check-radius-btn" class="btn btn--ghost btn--full">Check Delivery Eligibility</button>
+        <button type="button" id="to-payment-btn" class="btn btn--gold btn--full" style="margin-top:10px;" disabled>
+          Continue to Payment →
+        </button>
+      </form>
+    </div>
+
+    <!-- Step 2: Payment -->
+    <div id="checkout-step-2" class="checkout-pane">
+      <h3 class="checkout-pane__title">Payment Method</h3>
+      <div class="payment-options">
+        <label class="payment-option" id="payment-cod">
+          <input type="radio" name="payment" value="cod" checked />
+          <div class="payment-option__card">
+            <span class="payment-option__icon">💵</span>
+            <div>
+              <span class="payment-option__name">Cash on Delivery</span>
+              <span class="payment-option__note">+$5.00 COD fee applies</span>
+            </div>
+            <span class="payment-option__check">✓</span>
+          </div>
+        </label>
+        <label class="payment-option" id="payment-apple">
+          <input type="radio" name="payment" value="apple_pay" />
+          <div class="payment-option__card">
+            <span class="payment-option__icon"> </span>
+            <div>
+              <span class="payment-option__name">Apple Pay</span>
+              <span class="payment-option__note">Secure, instant payment</span>
+            </div>
+            <span class="payment-option__check">✓</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="checkout-order-summary" id="checkout-order-summary">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="checkout-pane__actions">
+        <button type="button" id="back-to-delivery-btn" class="btn btn--ghost">← Back</button>
+        <button type="button" id="to-confirm-btn" class="btn btn--gold">Review Order →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Confirmation -->
+    <div id="checkout-step-3" class="checkout-pane">
+      <h3 class="checkout-pane__title">Review & Place Order</h3>
+      <div id="order-review" class="order-review">
+        <!-- Populated by JS -->
+      </div>
+      <div id="checkout-error" class="form-error" style="display:none;"></div>
+      <div class="checkout-pane__actions">
+        <button type="button" id="back-to-payment-btn" class="btn btn--ghost">← Back</button>
+        <button type="button" id="place-order-btn" class="btn btn--gold btn--lg">
+          <span class="btn-text">Place Order 🎉</span>
+          <span class="btn-loader" style="display:none;">Processing…</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ORDER SUCCESS MODAL -->
+  <!-- ============================================================ -->
+  <div id="order-success-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
+  <div id="order-success-modal" class="modal order-success-modal modal--hidden" role="dialog" aria-modal="true">
+    <div class="order-success__content">
+      <div class="order-success__animation">
+        <div class="order-success__circle">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <h2 class="order-success__title">Order Placed!</h2>
+      <p class="order-success__subtitle">Your order is confirmed and will be delivered soon.</p>
+      <div class="order-success__number">
+        Order # <strong id="success-order-number">INF-XXXXXXXX</strong>
+      </div>
+      <p class="order-success__info">
+        You'll receive updates as your order is prepared and dispatched.
+        Please have a valid ID ready for delivery.
+      </p>
+      <div class="order-success__actions">
+        <button id="view-orders-btn" class="btn btn--gold btn--lg">View My Orders</button>
+        <button id="continue-shopping-btn" class="btn btn--ghost">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MY ORDERS MODAL -->
+  <!-- ============================================================ -->
+  <div id="orders-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
+  <div id="orders-modal" class="modal orders-modal modal--hidden" role="dialog" aria-modal="true" aria-labelledby="orders-title">
+    <button class="modal__close" id="orders-modal-close" aria-label="Close">&times;</button>
+    <h2 id="orders-title" class="modal__title">My Orders</h2>
+    <div id="orders-list" class="orders-list">
+      <div class="orders-loading">Loading your orders…</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PRODUCT QUICK VIEW MODAL -->
+  <!-- ============================================================ -->
+  <div id="quickview-overlay" class="modal-overlay modal-overlay--hidden" aria-hidden="true"></div>
+  <div id="quickview-modal" class="modal quickview-modal modal--hidden" role="dialog" aria-modal="true">
+    <button class="modal__close" id="quickview-close" aria-label="Close">&times;</button>
+    <div id="quickview-content" class="quickview__content">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BACK TO TOP BUTTON -->
+  <!-- ============================================================ -->
+  <button id="back-to-top" class="back-to-top back-to-top--hidden" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <!-- ============================================================ -->
+  <!-- SCRIPTS -->
+  <!-- ============================================================ -->
+
+  <script src="js/age-gate.js"></script>
+
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Toastify -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <!-- App Scripts (order matters) -->
+  <script src="js/auth.js"></script>
+  <script src="js/location.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/payment.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
